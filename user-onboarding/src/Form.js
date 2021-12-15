@@ -22,12 +22,6 @@ export default function Form(props) {
   
   return (
     <div>
-      <div>
-        <div>{errors.username}</div>
-        <div>{errors.email}</div>
-        <div>{errors.password}</div>
-      </div>
-
       <form onSubmit={onSubmit}>
         <label>Username
           <input 
@@ -67,6 +61,12 @@ export default function Form(props) {
 
         <button disabled={disabled}>Submit</button>
       </form>
+      <div>
+        <p>{errors.username}</p>
+        <p>{errors.email}</p>
+        <p>{errors.password}</p>
+        <p>{errors.tos}</p>
+      </div>
     </div>
   )
 }
