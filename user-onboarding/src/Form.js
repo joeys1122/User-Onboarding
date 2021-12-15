@@ -11,20 +11,29 @@ export default function Form(props) {
 
   const onSubmit = event => {
     event.preventDefault();
+    submit();
   }
 
   const onChange = event => {
-    console.log(event)
+    const {name, value, checked, type} = event.target;
+    const valueToUse = type === 'checkbox' ? checked : value;
+    change(name, valueToUse);
   }
-
+  console.log(errors);
   return (
     <div>
+      <div>
+        <div>{errors.username}</div>
+        <div>{errors.email}</div>
+        <div>{errors.password}</div>
+      </div>
+
       <form onSubmit={onSubmit}>
-        <label>Name
+        <label>Username
           <input 
             type='text'
-            name='name'
-            value={values.name}
+            name='username'
+            value={values.username}
             onChange={onChange}
           />
         </label>
@@ -56,7 +65,7 @@ export default function Form(props) {
           />
         </label>
 
-        <button>Submit</button>
+        <button disabled={disabled}>Submit</button>
       </form>
     </div>
   )
