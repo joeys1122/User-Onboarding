@@ -19,7 +19,7 @@ export default function Form(props) {
     const valueToUse = type === 'checkbox' ? checked : value;
     change(name, valueToUse);
   }
-  console.log(errors);
+  
   return (
     <div>
       <div>

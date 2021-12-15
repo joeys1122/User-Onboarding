@@ -25,6 +25,15 @@ function App() {
   const [users, setUsers] = useState([]);
   const [disabled, setDisabled] = useState(false);
 
+  const postNewUser = newUser => {
+    axios.post('https://reqres.in/api/users', newUser)
+      .then(res => {
+        setUsers([res.data, ...users])
+      })
+      .catch(err => console.log(err))
+      .finally(() => setFormValues(initialFormValues))
+  }
+
   const validate = (name, value) => {
     yup.reach(schema, name)
       .validate(value)
@@ -44,23 +53,22 @@ function App() {
       password: formValues.password.trim(),
       tos: !!formValues.tos
     }
-
-    setUsers(newUser);
+    postNewUser(newUser);
   }
 
   useEffect(() => {
     schema.isValid(formValues).then(valid => setDisabled(!valid))
   }, [formValues])
-  
+
   return (
     <div className="App">
       <h1>User Onboarding</h1>
       <Form values={formValues} submit={formSubmit} change={inputChange} disabled={disabled} errors={formErrors} />
 
       {
-        users.map((user, index) => {
+        users.map(user => {
           return (
-            <User key={index} details={user} />
+            <User key={user.id} details={user} />
           )
         })
       }

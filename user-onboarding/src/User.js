@@ -3,7 +3,8 @@ import React from "react";
 export default function User({details}) {
   return (
     <div>
-      {details}
+      <h2>User #{details.id}</h2>
+      <div>{JSON.stringify(details)}</div>
     </div>
   )
 }
