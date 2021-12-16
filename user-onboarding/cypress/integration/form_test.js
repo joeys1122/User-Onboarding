@@ -25,26 +25,58 @@ describe('Form test', () => {
     submitButton().should('be.disabled');
   })
 
-  it('can type in the input', () => {
-    userInput()
-      .should('have.value', '')
-      .type('joe-stanton')
-      .should('have.value', 'joe-stanton')
+  describe('filling inputs and checking submit btn', () => {
+    it('can type in the input', () => {
+      userInput()
+        .should('have.value', '')
+        .type('joe-stanton')
+        .should('have.value', 'joe-stanton')
+  
+      emailInput()
+        .should('have.value', '')
+        .type('joe@stanton.com')
+        .should('have.value', 'joe@stanton.com')
+  
+      passwordInput()
+        .should('have.value', '')
+        .type('password')
+        .should('have.value', 'password')
+    })
 
-    emailInput()
-      .should('have.value', '')
-      .type('joe@stanton.com')
-      .should('have.value', 'joe@stanton.com')
+    it('can check TOS', () => {
+      tosInput().should('not.be.checked');
+      tosInput().click();
+      tosInput().should('be.checked');
+    })
 
-    passwordInput()
-      .should('have.value', '')
-      .type('password')
-      .should('have.value', 'password')
+    it('submit btn enabled when everything is filled', () => {
+      userInput().type('joe-stanton');
+      emailInput().type('joe@stanton.com');
+      passwordInput().type('password');
+      tosInput().click();
+      submitButton().should('be.not.disabled');
+    })
+
+    it('shows error messages', () => {
+      userInput().type('joe');
+      cy.get('.errors').should('exist').contains('Name has to be at least 6 characters');
+      emailInput().type('joe');
+      cy.get('.errors').should('exist').contains('Must be a valid email');
+      passwordInput().type('pass');
+      cy.get('.errors').should('exist').contains('Password has to be at least 6 characters');
+    })
   })
 
-  it('can check TOS', () => {
-    tosInput().should('not.be.checked');
-    tosInput().click();
-    tosInput().should('be.checked');
+  describe('submitting a new user', () => {
+    it('adds new user', () => {
+      userInput().type('joe-stanton');
+      emailInput().type('joe@stanton.com');
+      passwordInput().type('password');
+      tosInput().click();
+      submitButton().click();
+      cy.intercept({method: 'POST'}).as('apiCheck');
+      cy.wait('@apiCheck');
+      cy.get('.newUser').should('exist').contains('joe-stanton').contains('joe@stanton.com').contains('password');
+    })
   })
 })
